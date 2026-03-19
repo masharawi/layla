@@ -233,10 +233,10 @@ export default function Home() {
                 variants={fadeUp}
                 className="max-w-md text-sm leading-relaxed text-muted"
               >
-                Senior communications professional with a strong track record in
-                corporate and internal communications. Experienced in advising
-                C-suite stakeholders, driving strategic initiatives, and translating
-                organisational strategy into compelling narratives.
+                Senior communications professional with a strong track record
+                in corporate and internal communications. Experienced in
+                advising C&#8209;suite stakeholders, driving strategic initiatives,
+                and translating organisational strategy into compelling narratives.
               </motion.p>
             </motion.div>
           </div>
@@ -283,8 +283,8 @@ function SidebarDetails() {
       <motion.div variants={fadeLeft}>
         <SidebarHeading>Contact</SidebarHeading>
         <div className="space-y-3 text-sm">
-          <ContactItem icon={MapPin} text="Amsterdam, NL → London" />
-          <ContactItem icon={Phone} text="+31 (0)6 25 56 72 45" />
+          <ContactItem icon={MapPin} text="Amsterdam, NL" />
+          <ContactItem icon={Phone} text="+31 6 2556 7245" />
           <ContactItem icon={Mail} text="hi@layla.digital" />
           <ContactItem icon={Linkedin} text="LinkedIn" href="https://www.linkedin.com/in/laylavanbruggen/" />
         </div>

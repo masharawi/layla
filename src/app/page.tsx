@@ -194,14 +194,28 @@ export default function Home() {
               className="flex flex-col justify-center px-12 py-12"
             >
               <motion.div variants={fadeRight} className="mb-1">
-                <motion.span
-                  animate={{ boxShadow: ["0 0 0px rgba(200,165,90,0)", "0 0 12px rgba(200,165,90,0.3)", "0 0 0px rgba(200,165,90,0)"] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  style={{ borderColor: "rgba(200,165,90,0.2)" }}
-                  className="inline-block rounded-full border bg-gold/5 px-3 py-1 text-[10px] font-medium uppercase tracking-widest text-gold"
-                >
-                  Available for London roles
-                </motion.span>
+                <span className="relative inline-block">
+                  {/* Rotating border ring */}
+                  <motion.span
+                    className="absolute -inset-[3px] rounded-full"
+                    style={{
+                      background: "conic-gradient(from 0deg, transparent 0%, rgba(200,165,90,0.5) 25%, transparent 50%, rgba(200,165,90,0.5) 75%, transparent 100%)",
+                      mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                      maskComposite: "exclude",
+                      WebkitMaskComposite: "xor",
+                      padding: "1.5px",
+                    }}
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                  />
+                  <motion.span
+                    animate={{ boxShadow: ["0 0 0px rgba(200,165,90,0)", "0 0 16px rgba(200,165,90,0.35)", "0 0 0px rgba(200,165,90,0)"] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    className="relative inline-block rounded-full bg-gold/10 px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-gold"
+                  >
+                    Available for London roles
+                  </motion.span>
+                </span>
               </motion.div>
 
               <motion.blockquote variants={fadeUp} className="my-6">

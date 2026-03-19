@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useCallback } from "react";
 import {
   Mail,
   Phone,
@@ -72,6 +72,24 @@ const revealLine = {
 /* ───── main page ───── */
 
 export default function Home() {
+  const handleExportPDF = useCallback(async () => {
+    const html2pdf = (await import("html2pdf.js")).default;
+    const el = document.querySelector(".cv-container");
+    if (!el) return;
+
+    html2pdf()
+      .set({
+        margin: 0,
+        filename: "Layla_van_Bruggen_CV.pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        pagebreak: { mode: ["avoid-all", "css", "legacy"] },
+      })
+      .from(el)
+      .save();
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#f5f4f0]">
       {/* Download FAB */}
@@ -79,7 +97,7 @@ export default function Home() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 2, duration: 0.5 }}
-        onClick={() => window.print()}
+        onClick={handleExportPDF}
         className="no-print fixed right-6 bottom-6 z-50 flex items-center gap-2.5 rounded-full bg-sidebar px-5 py-3.5 text-sm font-medium text-white shadow-2xl transition-all hover:scale-105 hover:shadow-gold/25 hover:shadow-xl active:scale-95 cursor-pointer group"
       >
         <Download className="h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
@@ -148,11 +166,9 @@ export default function Home() {
               {/* Name on sidebar */}
               <motion.h1
                 variants={fadeUp}
-                className="text-center font-serif text-3xl font-semibold leading-tight text-white"
+                className="text-center font-serif text-3xl font-semibold leading-tight text-white whitespace-nowrap"
               >
-                Layla
-                <br />
-                <span className="text-gold">van Bruggen</span>
+                Layla <span className="text-gold">van Bruggen</span>
               </motion.h1>
 
               <motion.div

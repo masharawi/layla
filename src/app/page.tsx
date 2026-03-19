@@ -21,13 +21,15 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.08 } },
 };
 
+const ease = [0.22, 1, 0.36, 1] as const;
+
 const fadeUp = {
   hidden: { opacity: 0, y: 40, filter: "blur(8px)" },
   visible: {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.7, ease },
   },
 };
 
@@ -37,7 +39,7 @@ const fadeLeft = {
     opacity: 1,
     x: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.6, ease },
   },
 };
 
@@ -46,7 +48,7 @@ const fadeRight = {
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.6, ease },
   },
 };
 
@@ -55,7 +57,7 @@ const scaleIn = {
   visible: {
     opacity: 1,
     scale: 1,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.6, ease },
   },
 };
 
@@ -63,7 +65,7 @@ const revealLine = {
   hidden: { scaleX: 0 },
   visible: {
     scaleX: 1,
-    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.8, ease },
   },
 };
 
@@ -228,7 +230,7 @@ export default function Home() {
           <motion.div
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
-            transition={{ delay: 0.6, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ delay: 0.6, duration: 1, ease }}
             className="h-[2px] origin-left bg-gradient-to-r from-sidebar via-gold to-sidebar"
           />
 
@@ -550,7 +552,7 @@ function LangBar({ lang, level, pct, delay }: { lang: string; level: string; pct
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${pct}%` }}
-          transition={{ delay, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ delay, duration: 1, ease }}
           className="relative h-full rounded-full bg-gradient-to-r from-gold/60 via-gold to-gold-light overflow-hidden"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent animate-shimmer opacity-0 group-hover/lang:opacity-100 transition-opacity" />

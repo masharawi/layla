@@ -178,11 +178,11 @@ export default function Home() {
 
               <motion.p
                 variants={fadeUp}
-                className="text-center text-[10px] font-medium uppercase tracking-[0.3em] text-sidebar-foreground/60"
+                className="text-center text-[13px] font-medium uppercase tracking-[0.35em] leading-relaxed text-sidebar-foreground/60"
               >
-                Senior Consultant
+                Communications
                 <br />
-                Internal Communications
+                Strategist
               </motion.p>
             </motion.div>
 

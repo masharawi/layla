@@ -285,7 +285,7 @@ function SidebarDetails() {
         <div className="space-y-3 text-sm">
           <ContactItem icon={MapPin} text="Amsterdam, NL" />
           <ContactItem icon={Phone} text="+31 6 2556 7245" />
-          <ContactItem icon={Mail} text="hi@layla.digital" />
+          <ContactItem icon={Mail} text="l.van.bruggen@hotmail.com" />
           <ContactItem icon={Linkedin} text="LinkedIn" href="https://www.linkedin.com/in/laylavanbruggen/" />
         </div>
       </motion.div>
@@ -332,12 +332,13 @@ function SidebarDetails() {
         >
           {[
             "Microsoft 365",
-            "Salesforce",
             "WordPress",
             "HubSpot",
             "Poppulo",
             "Google Analytics",
             "MailChimp",
+            "ChatGPT",
+            "Claude",
           ].map((tool) => (
             <motion.span
               key={tool}

@@ -194,27 +194,12 @@ export default function Home() {
               className="flex flex-col justify-center px-12 py-12"
             >
               <motion.div variants={fadeRight} className="mb-1">
-                <span className="relative inline-block">
-                  {/* Rotating border ring */}
-                  <motion.span
-                    className="absolute -inset-[3px] rounded-full"
-                    style={{
-                      background: "conic-gradient(from 0deg, transparent 0%, rgba(200,165,90,0.5) 25%, transparent 50%, rgba(200,165,90,0.5) 75%, transparent 100%)",
-                      mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                      maskComposite: "exclude",
-                      WebkitMaskComposite: "xor",
-                      padding: "1.5px",
-                    }}
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                  />
-                  <motion.span
-                    animate={{ boxShadow: ["0 0 0px rgba(200,165,90,0)", "0 0 16px rgba(200,165,90,0.35)", "0 0 0px rgba(200,165,90,0)"] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                    className="relative inline-block rounded-full bg-gold/10 px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-gold"
-                  >
-                    Available for London roles
-                  </motion.span>
+                <span className="relative inline-flex items-center gap-2 rounded-full border border-gold/20 bg-gold/10 px-4 py-2 text-[11px] font-bold uppercase tracking-widest text-gold">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-gold" />
+                  </span>
+                  Available for London roles
                 </span>
               </motion.div>
 
@@ -300,8 +285,8 @@ function SidebarDetails() {
         <div className="space-y-3 text-sm">
           <ContactItem icon={MapPin} text="Amsterdam, NL → London" />
           <ContactItem icon={Phone} text="+31 (0)6 25 56 72 45" />
-          <ContactItem icon={Mail} text="lvanbruggen@deloitte.nl" />
-          <ContactItem icon={Linkedin} text="LinkedIn" href="#" />
+          <ContactItem icon={Mail} text="hi@layla.digital" />
+          <ContactItem icon={Linkedin} text="LinkedIn" href="https://www.linkedin.com/in/laylavanbruggen/" />
         </div>
       </motion.div>
 

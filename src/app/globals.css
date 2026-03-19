@@ -60,6 +60,7 @@
   animation: pulse-gold 3s ease-in-out infinite;
 }
 
+
 @media print {
   @page {
     size: A4;

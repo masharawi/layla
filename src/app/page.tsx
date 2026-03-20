@@ -72,29 +72,49 @@ const revealLine = {
 /* ───── main page ───── */
 
 export default function Home() {
+  const [exporting, setExporting] = useState(false);
+
   const handleExportPDF = useCallback(async () => {
-    const { toPng } = await import("html-to-image");
-    const { PDFDocument } = await import("pdf-lib");
-    const el = document.querySelector(".cv-container") as HTMLElement;
-    if (!el) return;
+    setExporting(true);
+    try {
+      const { toCanvas } = await import("html-to-image");
+      const { PDFDocument } = await import("pdf-lib");
+      const el = document.querySelector(".cv-container") as HTMLElement;
+      if (!el) return;
 
-    const dataUrl = await toPng(el, { quality: 0.98, pixelRatio: 2 });
-    const pngBytes = await fetch(dataUrl).then((r) => r.arrayBuffer());
+      const canvas = await toCanvas(el, {
+        pixelRatio: 2,
+        cacheBust: true,
+        filter: (node: HTMLElement) => !node.classList?.contains("no-print"),
+      });
 
-    const pdf = await PDFDocument.create();
-    const img = await pdf.embedPng(pngBytes);
-    const a4Width = 595.28;
-    const scale = a4Width / img.width;
-    const pageHeight = img.height * scale;
-    const page = pdf.addPage([a4Width, pageHeight]);
-    page.drawImage(img, { x: 0, y: 0, width: a4Width, height: pageHeight });
+      const dataUrl = canvas.toDataURL("image/png");
+      const pngBytes = await fetch(dataUrl).then((r) => r.arrayBuffer());
 
-    const blob = new Blob([await pdf.save()], { type: "application/pdf" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "Layla_van_Bruggen_CV.pdf";
-    link.click();
-    URL.revokeObjectURL(link.href);
+      const pdf = await PDFDocument.create();
+      const img = await pdf.embedPng(pngBytes);
+      const a4Width = 595.28;
+      const scale = a4Width / img.width;
+      const pageHeight = img.height * scale;
+      const page = pdf.addPage([a4Width, pageHeight]);
+      page.drawImage(img, { x: 0, y: 0, width: a4Width, height: pageHeight });
+
+      const pdfBytes = await pdf.save();
+      const blob = new Blob([pdfBytes], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "Layla_van_Bruggen_CV.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(url), 100);
+    } catch (err) {
+      console.error("PDF export failed:", err);
+      window.print();
+    } finally {
+      setExporting(false);
+    }
   }, []);
 
   return (
@@ -105,10 +125,11 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 2, duration: 0.5 }}
         onClick={handleExportPDF}
-        className="no-print fixed right-6 bottom-6 z-50 flex items-center gap-2.5 rounded-full bg-sidebar px-5 py-3.5 text-sm font-medium text-white shadow-2xl transition-all hover:scale-105 hover:shadow-gold/25 hover:shadow-xl active:scale-95 cursor-pointer group"
+        disabled={exporting}
+        className="no-print fixed right-6 bottom-6 z-50 flex items-center gap-2.5 rounded-full bg-sidebar px-5 py-3.5 text-sm font-medium text-white shadow-2xl transition-all hover:scale-105 hover:shadow-gold/25 hover:shadow-xl active:scale-95 cursor-pointer group disabled:opacity-70 disabled:cursor-wait"
       >
-        <Download className="h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
-        Export PDF
+        <Download className={`h-4 w-4 transition-transform group-hover:-translate-y-0.5 ${exporting ? "animate-bounce" : ""}`} />
+        {exporting ? "Generating…" : "Export PDF"}
       </motion.button>
 
       {/* Scroll indicator */}

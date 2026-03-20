@@ -490,7 +490,7 @@ function PhotoWithSparks() {
   const handleClick = useCallback(() => {
     const batch = Array.from({ length: 14 }, (_, i) => Date.now() + i);
     setSparks(batch);
-    setTimeout(() => setSparks([]), 800);
+    setTimeout(() => setSparks([]), 1800);
   }, []);
 
   return (
@@ -523,7 +523,7 @@ function PhotoWithSparks() {
         const radius = 96;
         const startX = Math.cos((angle * Math.PI) / 180) * radius;
         const startY = Math.sin((angle * Math.PI) / 180) * radius;
-        const dist = 40 + Math.random() * 50;
+        const dist = 60 + Math.random() * 70;
         const size = 3 + Math.random() * 4;
         return (
           <motion.span
@@ -535,7 +535,7 @@ function PhotoWithSparks() {
               y: startY + Math.sin((angle * Math.PI) / 180) * dist,
               scale: 0,
             }}
-            transition={{ duration: 0.5 + Math.random() * 0.3, ease: "easeOut" }}
+            transition={{ duration: 1.0 + Math.random() * 0.5, ease: "easeOut" }}
             className="pointer-events-none absolute left-1/2 top-1/2 rounded-full bg-gold"
             style={{ width: size, height: size, marginLeft: -size / 2, marginTop: -size / 2 }}
           />

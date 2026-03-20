@@ -77,8 +77,11 @@ export default function Home() {
   const handleExportPDF = useCallback(async () => {
     setExporting(true);
     try {
-      const { toCanvas } = await import("html-to-image");
-      const { PDFDocument } = await import("pdf-lib");
+      const [{ toCanvas }, { PDFDocument }, { saveAs }] = await Promise.all([
+        import("html-to-image"),
+        import("pdf-lib"),
+        import("file-saver"),
+      ]);
       const el = document.querySelector(".cv-container") as HTMLElement;
       if (!el) return;
 
@@ -88,8 +91,10 @@ export default function Home() {
         filter: (node: HTMLElement) => !node.classList?.contains("no-print"),
       });
 
-      const dataUrl = canvas.toDataURL("image/png");
-      const pngBytes = await fetch(dataUrl).then((r) => r.arrayBuffer());
+      const pngBlob = await new Promise<Blob>((res) =>
+        canvas.toBlob((b) => res(b!), "image/png")
+      );
+      const pngBytes = await pngBlob.arrayBuffer();
 
       const pdf = await PDFDocument.create();
       const img = await pdf.embedPng(pngBytes);
@@ -100,17 +105,13 @@ export default function Home() {
       page.drawImage(img, { x: 0, y: 0, width: a4Width, height: pageHeight });
 
       const pdfBytes = await pdf.save();
-      const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "Layla_van_Bruggen_CV.pdf";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      setTimeout(() => URL.revokeObjectURL(url), 100);
+      saveAs(
+        new Blob([pdfBytes], { type: "application/pdf" }),
+        "Layla_van_Bruggen_CV.pdf"
+      );
     } catch (err) {
       console.error("PDF export failed:", err);
+      alert("PDF generation failed — opening print dialog as fallback.");
       window.print();
     } finally {
       setExporting(false);

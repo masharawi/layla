@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useState } from "react";
 import {
   Mail,
   Phone,
@@ -146,29 +146,7 @@ export default function Home() {
               />
 
               {/* Photo */}
-              <motion.div
-                variants={scaleIn}
-                whileHover={{ scale: 1.12 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="relative mb-6 cursor-pointer"
-              >
-                <div className="relative h-48 w-48 overflow-hidden rounded-full ring-2 ring-gold/30 ring-offset-4 ring-offset-sidebar transition-shadow duration-300 hover:shadow-[0_0_25px_6px_rgba(200,165,90,0.45)] hover:ring-gold/60">
-                  <Image
-                    src="/photo.png"
-                    alt="Layla van Bruggen"
-                    fill
-                    className="object-cover object-top"
-                    priority
-                  />
-                </div>
-                {/* Animated ring */}
-                <motion.div
-                  className="absolute -inset-2 rounded-full border"
-                  style={{ borderColor: "rgba(200,165,90,0.2)" }}
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                />
-              </motion.div>
+              <PhotoWithSparks />
 
               {/* Name on sidebar */}
               <motion.h1
@@ -505,6 +483,67 @@ function MainContent() {
 /* ═══════════════════════════════════════════
    SUB-COMPONENTS
    ═══════════════════════════════════════════ */
+
+function PhotoWithSparks() {
+  const [sparks, setSparks] = useState<number[]>([]);
+
+  const handleClick = useCallback(() => {
+    const batch = Array.from({ length: 14 }, (_, i) => Date.now() + i);
+    setSparks(batch);
+    setTimeout(() => setSparks([]), 800);
+  }, []);
+
+  return (
+    <motion.div
+      variants={scaleIn}
+      whileHover={{ scale: 1.12 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      className="relative mb-6 cursor-pointer"
+      onClick={handleClick}
+    >
+      <div className="relative h-48 w-48 overflow-hidden rounded-full ring-2 ring-gold/30 ring-offset-4 ring-offset-sidebar transition-shadow duration-300 hover:shadow-[0_0_25px_6px_rgba(200,165,90,0.45)] hover:ring-gold/60">
+        <Image
+          src="/photo.png"
+          alt="Layla van Bruggen"
+          fill
+          className="object-cover object-top"
+          priority
+        />
+      </div>
+      {/* Animated ring */}
+      <motion.div
+        className="absolute -inset-2 rounded-full border"
+        style={{ borderColor: "rgba(200,165,90,0.2)" }}
+        animate={{ rotate: 360 }}
+        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+      />
+      {/* Spark burst */}
+      {sparks.map((id, i) => {
+        const angle = (360 / sparks.length) * i;
+        const radius = 96;
+        const startX = Math.cos((angle * Math.PI) / 180) * radius;
+        const startY = Math.sin((angle * Math.PI) / 180) * radius;
+        const dist = 40 + Math.random() * 50;
+        const size = 3 + Math.random() * 4;
+        return (
+          <motion.span
+            key={id}
+            initial={{ opacity: 1, x: startX, y: startY, scale: 1.2 }}
+            animate={{
+              opacity: 0,
+              x: startX + Math.cos((angle * Math.PI) / 180) * dist,
+              y: startY + Math.sin((angle * Math.PI) / 180) * dist,
+              scale: 0,
+            }}
+            transition={{ duration: 0.5 + Math.random() * 0.3, ease: "easeOut" }}
+            className="pointer-events-none absolute left-1/2 top-1/2 rounded-full bg-gold"
+            style={{ width: size, height: size, marginLeft: -size / 2, marginTop: -size / 2 }}
+          />
+        );
+      })}
+    </motion.div>
+  );
+}
 
 function SidebarHeading({ children }: { children: React.ReactNode }) {
   return (

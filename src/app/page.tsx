@@ -106,7 +106,7 @@ export default function Home() {
 
       const pdfBytes = await pdf.save();
       saveAs(
-        new Blob([pdfBytes], { type: "application/pdf" }),
+        new Blob([pdfBytes as BlobPart], { type: "application/pdf" }),
         "Layla_van_Bruggen_CV.pdf"
       );
     } catch (err) {

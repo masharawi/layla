@@ -21,9 +21,9 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Layla van Bruggen — Senior Communications Consultant",
+  title: "Layla van Bruggen",
   description:
-    "I turn boardroom strategy into stories that move 7,000 people. Senior Consultant Internal Communications at Deloitte.",
+    "Communications strategist with a strong track record advising C-suite stakeholders and translating strategy into compelling narratives.",
 };
 
 export default function RootLayout({

@@ -73,21 +73,28 @@ const revealLine = {
 
 export default function Home() {
   const handleExportPDF = useCallback(async () => {
-    const html2pdf = (await import("html2pdf.js")).default;
-    const el = document.querySelector(".cv-container");
+    const { toPng } = await import("html-to-image");
+    const { PDFDocument } = await import("pdf-lib");
+    const el = document.querySelector(".cv-container") as HTMLElement;
     if (!el) return;
 
-    html2pdf()
-      .set({
-        margin: 0,
-        filename: "Layla_van_Bruggen_CV.pdf",
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-        pagebreak: { mode: ["avoid-all", "css", "legacy"] },
-      })
-      .from(el)
-      .save();
+    const dataUrl = await toPng(el, { quality: 0.98, pixelRatio: 2 });
+    const pngBytes = await fetch(dataUrl).then((r) => r.arrayBuffer());
+
+    const pdf = await PDFDocument.create();
+    const img = await pdf.embedPng(pngBytes);
+    const a4Width = 595.28;
+    const scale = a4Width / img.width;
+    const pageHeight = img.height * scale;
+    const page = pdf.addPage([a4Width, pageHeight]);
+    page.drawImage(img, { x: 0, y: 0, width: a4Width, height: pageHeight });
+
+    const blob = new Blob([await pdf.save()], { type: "application/pdf" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "Layla_van_Bruggen_CV.pdf";
+    link.click();
+    URL.revokeObjectURL(link.href);
   }, []);
 
   return (
